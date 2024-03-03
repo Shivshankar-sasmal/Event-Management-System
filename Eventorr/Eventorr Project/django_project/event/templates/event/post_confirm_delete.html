@@ -1,0 +1,74 @@
+{% extends 'event/base.html' %}         
+
+{% block css %}
+<title>Delete Post</title>
+{% endblock css %}
+
+
+{% block content %}
+{% load static %}
+<div class="container">        
+      <div class="row shadow-lg py-4">
+            <div class="col-12 col-lg-7 col-md-7 p-2 mx-auto detail">
+                  <form method="POST" class="my-2">
+                    {% csrf_token %}
+                       <h2 class="text-center red">Are you Sure you want to delete the post <br> " {{object.title}} "</h2>
+                       <div class="d-flex justify-content-end mt-2">
+                            <button type="submit" class="btn btn-outline-danger mr-1">Yes, Delete</button>
+                            <a href="{% url 'post-detail' object.id %}" class="btn btn-outline-secondary">Cancel</a>   
+                       </div>
+                   </form>
+                  <div class="event_content_touch mb-2">
+                              <div class="blog-header">
+                                      <img src="{{object.event_poster_image.url}}" class="img-fluid" alt="">
+                                      <div class="blog-header-info">
+                                            <kbd class="bg-primary">{{object.event_type}}</kbd>
+                                            <h3><a href="{% url 'post-detail' object.id %}">{{object.title}}</a></h3>
+                                      </div>                      
+                                </div>
+                          
+                                <div class="px-2 pt-2 d-flex justify-content-between">
+                                      <div class="d-flex">
+                                            <a href="{% url 'user-posts' object.author.username %}"> <img src="{{object.author.profile.image.url}}" alt="" class="img-fluid img-event-profile"></a>
+                                            <a href="{% url 'user-posts' object.author.username %}"><h3 class="my-auto ml-3 slogan word-break footlight">{{object.author}}</h3></a>
+                                      </div>        
+                                      <div>
+                                            <span class="mr-2 event-profile-font"> <a href="https://www.google.co.in/maps/dir//{{object.district}},+Maharashtra/" class="text-muted" target="_blank"><i class="fa fa-map-marker red"></i> {{object.district|truncatewords:1}}</a> </span>
+                                              <a href="{{object.event_poster_image.url}}" download><i class="fa fa-arrow-circle-o-down text-dark"></i></a>
+                                      </div>
+                                </div>
+                                <div class="text-muted date ml-date">{{ object.date_posted }}</div>
+                                      <div class="p-2 event-profile-font border-bottom">
+                                                <div>{{object.content|linebreaks}}</div>
+                                                {% if object.college_url %}
+                                                      <br>
+                                                      <div class="word-break"><a href="{{object.college_url}}" target="_blank">{{object.college_url}}</a></div>
+                                                {% endif %}
+                                                <div class="d-flex pt-2 justify-content-between">
+                                                      <div class="red">
+                                                            Total Seats - {{object.max_seats}}
+                                                      </div>
+                                                      {% if user in object.fake_post_report.all %}
+                                                            <a href="{% url 'fake_post_report' object.id %}"><span class="red">{{object.fake_post_report.count}}</span> <i class="fa fa-thumbs-down red icon px-1"></i></a></a>
+                                                      {% else %}
+                                                            <a href="{% url 'fake_post_report' object.id %}" title="Click here, If It is a Fake Event !"><span class="text-primary">{{object.fake_post_report.count}}</span> <i class="fa fa-thumbs-o-down text-primary px-1 icon"></i></a>
+                                                      {% endif %}       
+                                                </div>
+                                      </div>
+                    </div>                                    
+                        <div class="pt-2 d-flex justify-content-between event-profile-font">
+                              <div>
+                                    <a href="{% url 'form_creation' object.id %}" class="btn btn-outline-primary btn-sm">Participate</a>
+                              </div>
+                              <div class="text-muted outer-content-touch">
+                                  <small><i class="fa fa-calendar-check-o mr-1"></i>{{object.event_date|date:'F d, Y'}}</small>
+                              </div>
+                        </div>
+          </div>                                      
+      </div>
+</div>
+{% endblock content %}
+
+
+{% block js %}
+{% endblock js %}

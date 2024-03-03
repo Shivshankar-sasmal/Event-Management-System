@@ -1,0 +1,25 @@
+{% autoescape off %}
+<div style="background-color: #fff; width: 90%; margin: auto; padding: 16px;">
+		<div style="color: #42c0fb; font-family: Comic Sans Ms;	text-align:center; font-size: 50px; font-weight: bolder;">Eventorr</div>
+		<h5 style="color: black; font-family: Comic Sans Ms;	text-align:center; margin-top: -10px; font-weight: bold;">CREATE EVENTS FOR FREE</h5>
+		<br>
+		<div style="color:#1e90ff; font-size: 20px; text-align: center; font-family: Comic Sans Ms;">Hi, {{user.first_name}}</div>
+		<div style="color: #1e90ff; font-size: 15px; text-align: center; font-family: Comic Sans Ms;">[ {{user.username}} ]</div>
+		<br>
+		<br>
+		<div style="font-size: 15px; font-family: Comic Sans Ms; text-align: center; color: black;"><div style="color: black; font-weight: bold;">We are <span style="font-size: 25px; color:  #42c0fb;">Eventorr</span>, an Event Hosting Organization.</div>
+		<br>
+		<br>
+		<div style="font-size: 15px; color: black;">We Host Event for Users for Free, We Help Peoples To Reach Their Events To Most Of the People</div>
+		<br>
+		<br>
+		<b style="color: black;">Please Click, On the Below Button To Confirm Your Account</b>
+		<br>
+		<br>
+		<button style="padding:5px 10px; background-color: #1e90ff; border : none;"><a href="http://{{domain}}{% url 'activate' uidb64=uid token=token %}" style="text-align: center; color: white; font-family: Comic Sans Ms; text-decoration: none;">Confirm Account</a></button>
+		<br>
+		<br>
+		<div style="font-size: 18px;">We are Thankful, for using our Website</div>
+		</div>
+</div>
+{% endautoescape %}

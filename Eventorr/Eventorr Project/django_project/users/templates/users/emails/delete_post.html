@@ -1,0 +1,56 @@
+{% autoescape off %}
+<div style="background-color: #fff; width: 90%; margin: auto; padding: 16px; text-align: center;">
+    <div style="color: #42c0fb; font-family: Comic Sans Ms; text-align:center; font-size: 50px; font-weight: bolder;">Eventorr</div>
+        <h5 style="color: black; font-family: Comic Sans Ms;    text-align:center; margin-top: -10px; font-weight: bold;">CREATE EVENTS FOR FREE</h5>
+    <br>
+
+	 <div style="font-size: 18px; color:#1e90ff;">
+        <span style="color:#1e90ff; ">Hi, {{name}}</span>
+        <br>
+        <span style="color: black; font-weight: bold;">Post Have Been Deleted, By Administrator</span> <br>
+        <span style="color: red; font-size: 15px; font-weight: bold;">Event Manager : {{hoster}} </span>
+    </div>
+     <div style="font-size: 18px; color: red;">
+        <br>
+        <br>
+        <b>Your Post Is Been Deleted Since, It has been Reported As Fake By Many Users</b>
+    </div>
+    <br>
+    <br>
+    <div style="font-size: 16px;color: black;">
+        <b>Type Of Event</b>
+        <br>
+       {{event_type}}
+    </div>
+    <br>
+    <br>
+    <div style="font-size: 16px;color: black;;">
+        <b>Event Title</b>
+        <br>
+        {{title}}
+    </div>
+    <br>
+    <br>
+    <div style="font-size: 16px;color: black;">
+        <b>Event Content</b>
+        <br>
+        {{content}}
+    </div>
+    <br>
+    <br>
+    <div style="font-size: 16px; color: black;">
+        <b>Event Place</b>
+        <br>
+       {{district}}
+    </div>
+    <br>
+    <br>
+    <div style="font-size: 16px; color: black;">
+        <b>Event Date</b>
+        <br>
+       {{event_dates}}
+    </div>
+    <br>
+    <div style="font-size: 18px;">Thank You, for Using Our Site !</div>
+</div>
+{% endautoescape %}

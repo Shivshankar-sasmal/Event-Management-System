@@ -1,0 +1,143 @@
+{% extends 'event/base.html' %}
+
+{% block css %}
+      <title>Home</title>
+{% endblock %}
+
+{% block content %}
+ <div class="text-primary display-3 slogan text-center"><a href="{% url 'event-home' %}">Eventorr !</a></div>
+
+    <div class="container home">
+            <form action="{% url 'event-home' %}"  autocomplete="off" method="GET">
+                  <div class="p-1 rounded-pill shadow-sm mb-4 d-flex">
+                              <input type="search" autocomplete="off" placeholder="What are you looking for ?" class="form-control border-0 rounded-pill pl-4" name="search" value="{{request.GET.search}}">
+                              <button type="submit" class="btn btn-link text-primary"> <i class="fa fa-search"></i> </button> 
+                  </div>    
+            </form>       
+            
+  <div class="row">
+      <div class="col-12 col-lg-7 col-md-7 col-sm-12 shadow p-2 mb-auto mx-auto">      
+            {% for post in posts %}
+            <div class="event_content_touch mb-2">
+                  <div class="blog-header">
+                        <img src="{{post.event_poster_image.url}}" class="img-fluid" alt="">
+                        <div class="blog-header-info">
+                              <kbd class="bg-primary">{{post.event_type}}</kbd>
+                              <h3><a href="{% url 'post-detail' post.id %}">{{post.title}}</a></h3>
+                        </div>                      
+                  </div>
+                  
+                  <div class="content_event">
+                        <div class="px-2 pt-2 d-flex justify-content-between">
+                              <div class="d-flex">
+                                    <a href="{% url 'user-posts' post.author.username %}"> <img src="{{post.author.profile.image.url}}" alt="" class="img-fluid img-event-profile"></a>
+                                    <a href="{% url 'user-posts' post.author.username %}"><h3 class="my-auto ml-3 slogan word-break">{{post.author}}</h3></a>
+                              </div>
+                              <div>
+                                    <span class="mr-2 event-profile-font"> <a href="https://www.google.co.in/maps/dir//{{post.district}},+Maharashtra/" class="text-muted" target="_blank"><i class="fa fa-map-marker red"></i> {{post.district|truncatewords:1}}</a> </span>
+                                    <a href="{{post.event_poster_image.url}}" download><i class="fa fa-arrow-circle-o-down text-dark"></i></a>
+                              </div>
+                        </div>
+                        <div class="text-muted date ml-date">{{ post.date_posted }}</div>
+                        <div class="p-2 event-profile-font border-bottom">
+                          <div>{{post.content|linebreaks}}</div>
+                          {% if post.college_url %}
+                                <br>
+                                <div class="word-break"><a href="{{post.college_url}}" target="_blank">{{post.college_url}}</a></div>
+                          {% endif %}
+                              <div class="d-flex pt-2 justify-content-between">
+                                    <div class="red">
+                                          Total Seats - {{post.max_seats}}
+                                    </div>
+                                    {% if user in post.fake_post_report.all %}
+                                          <a href="{% url 'fake_post_report' post.id %}"><span class="red">{{post.fake_post_report.count}}</span> <i class="fa fa-thumbs-down red icon px-1"></i></a></a>
+                                    {% else %}
+                                          <a href="{% url 'fake_post_report' post.id %}" title="Click here, If It is a Fake Event !"><span class="text-primary">{{post.fake_post_report.count}}</span> <i class="fa fa-thumbs-o-down text-primary px-1 icon"></i></a>
+                                    {% endif %}        
+                              </div>
+                        </div>
+                  </div>            
+
+                  <div class="pt-2 d-flex justify-content-between event-profile-font">
+                        <div>
+                              <a href="{% url 'form_creation' post.id %}" class="btn btn-outline-primary btn-sm">Participate</a>
+                        </div>
+                        <div class="text-muted outer-content-touch">
+                            <small><i class="fa fa-calendar-check-o mr-1"></i>{{post.event_date|date:'F d, Y'}}</small>
+                        </div>
+                  </div>
+            
+            </div>  
+            {% endfor %}
+      </div>
+
+            <div class="col-12 col-lg-4 col-md-4 col-sm-4 shadow-lg row-center category text-center py-4 mb-auto">
+                  <div class="py-3 h4"><kbd class="bg-danger px-4 word-wrap">All_Events</kbd></div>
+                  <kbd class="bg-light m-1 event-profile-font"><a href="{% url 'event-home' %}">All</a></kbd>
+
+                   <div class="py-2 mt-4 h4"><kbd class="bg-primary px-4">Programming</kbd></div>
+                  {% with 'C+Program Java Python HTML CSS Javacript Typescript Django Scala Pascal Flutter Go Hack SQL PHP Swift' as list %}
+                        {% for tag in list.split %}
+                              <kbd class="bg-light m-1 event-profile-font"><a href="{% url 'event-home' %}?search={{tag}}">{{tag}}</a></kbd>
+                        {% endfor %}
+                  {% endwith %}
+
+                  <div class="py-2 mt-4 h4"><kbd class="bg-primary px-4">Gaming</kbd></div>
+                  {% with 'PUBG FreeFire Clash+of+Clans Spartans Chess' as list %}
+                        {% for tag in list.split %}
+                              <kbd class="bg-light m-1 event-profile-font"><a href="{% url 'event-home' %}?search={{tag}}">{{tag}}</a></kbd>
+                        {% endfor %}
+                  {% endwith %}
+
+                   <div class="py-2 mt-4 h4"><kbd class="bg-primary px-4">Activity</kbd></div>
+                  {% with 'Poster+Presentation Treasure+Hunt Spell+Buzz' as list %}
+                        {% for tag in list.split %}
+                              <kbd class="bg-light m-1 event-profile-font"><a href="{% url 'event-home' %}?search={{tag}}">{{tag}}</a></kbd>
+                        {% endfor %}
+                  {% endwith %}
+
+                  <div class="py-2 mt-4 h4"><kbd class="bg-primary px-4">Sports</kbd></div>
+                  {% with 'Cricket Football Basketball Swimming Table+Tennis' as list %}
+                        {% for tag in list.split %}
+                              <kbd class="bg-light m-1 event-profile-font"><a href="{% url 'event-home' %}?search={{tag}}">{{tag}}</a></kbd>
+                        {% endfor %}
+                  {% endwith %}
+
+                  <div class="py-2 mt-4 h4"><kbd class="bg-primary px-4">Other</kbd></div>
+                  {% with 'Seminar Speech Debate Tiktok Cooking Baking' as list %}
+                        {% for tag in list.split %}
+                              <kbd class="bg-light m-1 event-profile-font"><a href="{% url 'event-home' %}?search={{tag}}">{{tag}}</a></kbd>
+                        {% endfor %}
+                  {% endwith %}
+            </div>
+      </div>
+
+{% if is_paginated %}
+<div class="my-4 text-center">
+      {% if page_obj.has_previous %}
+                  <a href="?page=1{% if request.GET.search %}&search={{request.GET.search}}{% endif %}" class="btn btn-outline-info">First</a>
+      {% endif %}
+
+      {% for num in  page_obj.paginator.page_range %}
+                  {% if page_obj.number == num %}
+                              <a href="?page={{num}}{% if request.GET.search %}&search={{request.GET.search}}{% endif %}" class="btn btn-danger">{{num}}</a>
+                  {% elif num > page_obj.number|add:'-3' and  num < page_obj.number|add:'3' %}
+                  <a href="?page={{num}}{% if request.GET.search %}&search={{request.GET.search}}{% endif %}" class="btn btn-outline-info">{{num}}</a>
+                  {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+            <a href="?page={{page_obj.paginator.num_pages}}{% if request.GET.search %}&search={{request.GET.search}}{% endif %}" class="btn btn-outline-info">Last</a>
+      {% endif %}
+</div>
+{% endif %}      
+</div>
+
+{% endblock %}
+
+
+
+{% load static %}
+{% block js %}
+<script type="text/javascript" src="{% static 'event/js/django-main.js' %}"></script>
+{% endblock js %}

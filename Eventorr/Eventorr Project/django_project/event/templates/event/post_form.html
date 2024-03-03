@@ -1,0 +1,129 @@
+{% extends 'event/base.html' %}
+{% load crispy_forms_tags %}
+
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'event/js/jquery-ui-1.12.1/jquery-ui.min.css' %}">
+<link rel="stylesheet" href="{% static 'event/js/jquery-ui-1.12.1/jquery-ui.structure.min.css' %}">
+<link rel="stylesheet" href="{% static 'event/js/jquery-ui-1.12.1/jquery-ui.theme.min.css' %}">
+<title>Create Post</title>
+{% endblock css %}
+
+
+{% block content %}
+{% load static %}
+<div class="container">
+      <div class="row shadow-lg py-5 m-1">
+                <div class="col-12">
+                        <h2 class="text-center slogan">Create & Update Event</h2>
+                        <hr>
+                </div>
+
+                {% if not object %}
+                      <div class="col-12 col-lg-6 col-md-6 imgs">
+                      <div class="col-12 col-lg-12 col-md-12">
+                            <div class="login-container pt-3">
+                                    <div class="text-big h4s ml-5 text-muted">
+                                          <b>Event Posters </b> are usually the first piece of media created for an <b>event.</b> <b>Posters</b> can be powerful if creating excitement & interest for your <b>event</b> if done correctly.
+                                    </div>
+                            </div>
+                            <img src="{% static 'event/images/default/undraw_post2_19cj.png' %}" alt="" class="img-fluid py-auto">
+                         </div>
+                </div>
+                {% else %}
+                    <div class="col-12 col-lg-6 col-md-6 mx-auto p-2 detail mb-4">
+                    <div class="event_content_touch mb-2">
+                              <div class="blog-header">
+                                      <img src="{{object.event_poster_image.url}}" class="img-fluid" alt="">
+                                      <div class="blog-header-info">
+                                            <kbd class="bg-primary">{{object.event_type}}</kbd>
+                                            <h3><a href="{% url 'post-detail' object.id %}">{{object.title}}</a></h3>
+                                      </div>                      
+                                </div>
+                          
+                                <div class="px-2 pt-2 d-flex justify-content-between">
+                                      <div class="d-flex">
+                                            <a href="{% url 'user-posts' object.author.username %}"> <img src="{{object.author.profile.image.url}}" alt="" class="img-fluid img-event-profile"></a>
+                                            <a href="{% url 'user-posts' object.author.username %}"><h3 class="my-auto ml-3 slogan word-break">{{object.author}}</h3></a>
+                                      </div>        
+                                      <div>
+                                            <span class="mr-2 event-profile-font"> <a href="https://www.google.co.in/maps/dir//{{object.district}},+Maharashtra/" class="text-muted" target="_blank"><i class="fa fa-map-marker text-danger"></i> {{object.district|truncatewords:1}}</a> </span>
+                                              <a href="{{object.event_poster_image.url}}" download><i class="fa fa-arrow-circle-o-down text-dark"></i></a>
+                                      </div>
+                                </div>
+                                <div class="text-muted date ml-date">{{ object.date_posted }}</div>
+                                      <div class="p-2 event-profile-font border-bottom">
+                                                <div>{{object.content|linebreaks}}</div>
+                                                {% if object.college_url %}
+                                                      <br>
+                                                      <div class="word-break"><a href="{{object.college_url}}" target="_blank">{{object.college_url}}</a></div>
+                                                {% endif %}
+                                                <div class="d-flex pt-2 justify-content-between">
+                                                      <div class="red">
+                                                            Total Seats - {{object.max_seats}}
+                                                      </div>
+                                                      {% if user in object.fake_post_report.all %}
+                                                            <a href="{% url 'fake_post_report' object.id %}"><span class="red">{{object.fake_post_report.count}}</span> <i class="fa fa-thumbs-down red icon px-1"></i></a></a>
+                                                      {% else %}
+                                                            <a href="{% url 'fake_post_report' object.id %}" title="Click here, If It is a Fake Event !"><span class="text-primary">{{object.fake_post_report.count}}</span> <i class="fa fa-thumbs-o-down text-primary px-1 icon"></i></a>
+                                                      {% endif %}       
+                                                </div>
+                                      </div>
+                        </div>                          
+                        <div class="pt-2 d-flex justify-content-between event-profile-font">
+                              <div>
+                                    <a href="{% url 'form_creation' object.id %}" class="btn btn-outline-primary btn-sm">Participate</a>
+                              </div>
+                              <div class="text-muted outer-content-touch">
+                                  <small><i class="fa fa-calendar-check-o mr-1"></i>{{object.event_date|date:'F d, Y'}}</small>
+                              </div>
+                        </div>
+                </div>
+                {% endif %}
+
+                <div class="col-11 col-lg-5 col-md-9 row-center">
+                    <form method="POST" enctype="multipart/form-data" autocomplete="off">
+                      {% csrf_token %}
+                            <div class="text-small">
+                                  <div class="row">
+                                        <div class="col-12">
+                                              {{form.title|as_crispy_field}}
+                                              {{form.content|as_crispy_field}}
+                                        </div>
+                                        <div class="col-12 col-lg-6 col-md-6">
+                                              {{form.event_date|as_crispy_field}}
+                                              {{form.district|as_crispy_field}}
+                                        </div>
+                                        <div class="col-12 col-lg-6 col-md-6">
+                                              {{form.event_type|as_crispy_field}}
+                                              {{form.max_seats|as_crispy_field}}
+                                        </div>
+                                        <div class="col-12">
+                                          {{form.college_url|as_crispy_field}}
+                                        </div>
+                                        <div class="col-12">
+                                          {{form.event_poster_image|as_crispy_field}}
+                                        </div>
+                                  </div>
+                            </div>  
+                            <div class="form-group text-center mt-4">
+                                <button class="btn btn-outline-primary" type="submit">Post Event</button>
+                                <hr>
+                            </div>
+                    </form>
+                 </div>
+      </div>
+
+      <div class="col-12 alert alert-danger m-1 mt-5 text-center">
+                <li type="circle"> Please, make sure that you <b>Don't Post the Same Post</b> Posted by <b>Other User</b>, Else an <b>Official Complaint</b> may get Registered <b>Against You</b></li>
+      </div>
+
+</div>
+{% endblock content %}
+
+
+{% load static %}
+{% block js %}
+<script type="text/javascript" src="{% static 'event/js/jquery-ui-1.12.1/jquery-ui.js' %}"></script>
+<script type="text/javascript" src="{% static 'event/js/django-main.js' %}"></script>
+{% endblock js %}

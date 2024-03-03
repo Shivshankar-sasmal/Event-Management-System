@@ -1,0 +1,77 @@
+{% extends 'event/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block css %}
+<title>Profile</title>
+{% endblock css %}
+
+
+{% block content %}
+{% load static %}
+<div class="container profile">
+      <div class="row">
+            <div class="col-12 col-lg-4 col-md-6 pt-3 pb-5">
+              <div class="card">
+                      <div class="card-image">
+                            <img src="{% static 'event/images/default/undraw_code_thinking_1jeh.png' %}" alt="">
+                      </div>                     
+                      <div class="profile-image">
+                            <img src="{{user.profile.image.url}}" alt="">
+                      </div>
+                      <div class="card-content">
+                            <h2 class="py-3 event-profile-font h3">{{user.first_name}}</h2>
+                            <h5 class="red event-profile-font">{{user.username}}</h5>
+                            <blockquote class="container text-muted event-profile-font">
+                              <i class="fa fa-quote-left fa-2x text-primary"></i>
+                                {{user.profile.about_you}}
+                            </blockquote>
+                            <h5><i class="fa fa-envelope red"></i> <small class="event-profile-font word-break">{{user.email}}</small></h5>
+                      </div>
+                      <hr>
+                      <div class="pb-3 d-flex justify-content-around">
+                          <i class="fa fa-home fa-2x"></i> 
+                          <span class="event-profile-font">{{user.last_name}}</span>
+                      </div>
+              </div>
+            </div>       	
+              
+            <div class="col-12 col-lg-8 col-md-6 shadow-lg py-4">
+                  <form method="POST" enctype="multipart/form-data" autocomplete="off">
+                    {% csrf_token %}
+                      <fieldset>
+                             <legend class="border-bottom py-2 slogan"><big>Profile Info</big></legend>
+                      </fieldset>
+
+                      <div class="text-small container row-center" >
+                            <div class="row">
+                                  <div class="col-12">
+                                        {{u_form.first_name|as_crispy_field}}
+                                        {{u_form.username|as_crispy_field}}
+                                  </div>
+                                  <div class="col-12 col-lg-6 col-md-6">
+                                        {{u_form.last_name|as_crispy_field}}                                  
+                                  </div>
+                                  <div class="col-12 col-lg-6 col-md-6">
+                                        {{p_form.image|as_crispy_field}}                                  
+                                  </div>
+                                  <div class="col-12">
+                                        {{p_form.about_you|as_crispy_field}}                                  
+                                  </div>
+                            </div>
+                      </div>
+
+                      <div class="form-group text-center pt-4">
+                             <button class="btn btn-outline-primary" type="submit">Update</button>
+                      </div>
+                </form>
+             </div>
+        </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+{% endblock js %}
+
+</body>
+
+</html>

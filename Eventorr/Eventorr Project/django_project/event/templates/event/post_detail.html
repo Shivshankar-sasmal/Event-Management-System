@@ -1,0 +1,118 @@
+{% extends 'event/base.html' %}         
+
+{% block css %}
+<title>Detailed Post</title>
+{% endblock css %}
+
+
+{% block content %}
+{% load static %}
+<div class="container">        
+      <div class="row shadow-lg py-4">
+            <div class="col-12 col-lg-4 col-md-6 pt-5 mx-auto pb-5 profile imgs">
+                  <div class="card">
+                          <div class="card-image">
+                                <img src="{% static 'event/images/default/undraw_code_thinking_1jeh.png' %}" alt="">
+                          </div>                     
+                          <div class="profile-image">
+                                <img src="{{object.author.profile.image.url}}" alt="">
+                          </div>
+                          <div class="card-content">
+                                <h2 class="py-3 event-profile-font h3">{{object.author.first_name}}</h2>
+                                <h5 class="red event-profile-font">{{object.author.username}}</h5>
+                                <blockquote class="container text-muted event-profile-font">
+                                  <i class="fa fa-quote-left fa-2x text-primary"></i>
+                                    {{object.author.profile.about_you}}
+                                </blockquote>
+                                <h5><i class="fa fa-envelope red"></i> <small class="event-profile-font word-break">{{object.author.email}}</small></h5>
+                          </div>
+                          <hr>
+                          <div class="pb-3 d-flex justify-content-around">
+                              <i class="fa fa-home fa-2x"></i> 
+                              <span class="event-profile-font">{{object.author.last_name}}</span>
+                          </div>
+                  </div>
+            </div>       	
+                  
+            
+
+            <div class="col-12 col-lg-7 col-md-7 mx-auto p-2 detail my-auto">
+                  {% if object.author == user %}
+                        <div class="d-flex justify-content-end my-2">
+                              <a href="{% url 'post-update' object.id %}" class="btn btn-outline-dark mr-1">Update</a>
+                              <a href="{% url 'post-delete' object.id %}" class="btn btn-outline-danger">Delete</a>
+                        </div>
+                  {% endif%}
+                  <div class="event_content_touch mb-2">
+                              <div class="blog-header">
+                                      <img src="{{object.event_poster_image.url}}" class="img-fluid" alt="">
+                                      <div class="blog-header-info">
+                                            <kbd class="bg-primary">{{object.event_type}}</kbd>
+                                            <h3><a href="{% url 'post-detail' object.id %}">{{object.title}}</a></h3>
+                                      </div>                      
+                                </div>
+                          
+                                <div class="px-2 pt-2 d-flex justify-content-between">
+                                      <div class="d-flex">
+                                            <a href="{% url 'user-posts' object.author.username %}"> <img src="{{object.author.profile.image.url}}" alt="" class="img-fluid img-event-profile"></a>
+                                            <a href="{% url 'user-posts' object.author.username %}"><h3 class="my-auto ml-3 slogan word-break">{{object.author}}</h3></a>
+                                      </div>        
+                                      <div>
+                                            <span class="mr-2 event-profile-font"> <a href="https://www.google.co.in/maps/dir//{{object.district}},+Maharashtra/" class="text-muted" target="_blank"><i class="fa fa-map-marker red"></i> {{object.district|truncatewords:1}}</a> </span>
+                                              <a href="{{object.event_poster_image.url}}" download><i class="fa fa-arrow-circle-o-down text-dark"></i></a>
+                                      </div>
+                                </div>
+                                <div class="text-muted date ml-date">{{ object.date_posted }}</div>
+                                      <div class="p-2 event-profile-font border-bottom">
+                                                <div>{{object.content|linebreaks}}</div>
+                                                {% if post.college_url %}
+                                                      <br>
+                                                      <div class="word-break"><a href="{{object.college_url}}" target="_blank">{{object.college_url}}</a></div>
+                                                {% endif %}
+                                                <div class="d-flex pt-2 justify-content-between">
+                                                      <div class="red">
+                                                            Total Seats - {{object.max_seats}}
+                                                      </div>
+                                                      {% if user in object.fake_post_report.all %}
+                                                            <a href="{% url 'fake_post_report' object.id %}"><span class="red">{{object.fake_post_report.count}}</span> <i class="fa fa-thumbs-down red icon px-1"></i></a></a>
+                                                      {% else %}
+                                                            <a href="{% url 'fake_post_report' object.id %}" title="Click here, If It is a Fake Event !"><span class="text-primary">{{object.fake_post_report.count}}</span> <i class="fa fa-thumbs-o-down text-primary px-1 icon"></i></a>
+                                                      {% endif %}       
+                                                </div>
+                                      </div>
+                    </div>                          
+                     
+                        <div class="pt-2 d-flex justify-content-between event-profile-font">
+                              <div>
+                                    <a href="{% url 'form_creation' object.id %}" class="btn btn-outline-primary btn-sm">Participate</a>
+                              </div>
+                              <div class="text-muted outer-content-touch">
+                                  <small><i class="fa fa-calendar-check-o mr-1"></i>{{object.event_date|date:'F d, Y'}}</small>
+                              </div>
+                        </div>
+            </div>                          
+                        <div class="container">  
+                            <p class="event-profile-font red text-center mt-4 h4"> People Participated : {{forms.count}}</p>
+                            <hr color=red>
+                               {% if object.author == user %}
+                                    <ol class="row bg-light">
+                                    {% for form in forms %} 
+                                          <li type="1" class="col-12 col-lg-6 col-md-6 py-3 word-break event-profile-font">
+                                                  Name : <span class="red">{{form.user_person.first_name}}</span> <br>
+                                                  Username : {{form.user_person.username}} <br>
+                                                  Phone : <a href="tel:+91{{form.phone}}">+91{{form.phone}}</a><br>
+                                                  Email : <a href="mailto:{{form.user_person.email}}">{{form.user_person.email}}</a><br>
+                                                  College : {{form.college}} <br>
+                                                  <div class="text-center my-2"><a href="{% url 'form-delete' object.id form.id %}" class="btn btn-outline-danger btn-sm">Delete Form</a></div>
+                                          </li>
+                                    {% endfor %} 
+                                    </ol>
+                                {% endif %}          
+                        </div>  
+          </div>                                       
+</div>
+{% endblock content %}
+
+
+{% block js %}
+{% endblock js %}

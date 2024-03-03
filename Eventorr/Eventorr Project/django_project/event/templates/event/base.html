@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Create Events For Free">
+    <link rel="icon" type="image/png" href="{% static 'event/images/icon/eventorr.png' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'event/css/bootstrap.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'event/css/event-main.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'event/css/font-awesome.min.css' %}" type="text/css">
+
+     {% block css%} {% endblock css %}
+ </head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top brand-gradient">
+        <div class="container">
+              <a class="navbar-brand heading" href="{% url 'event-home' %}">Eventorr</a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                 {% if user.is_authenticated %}
+                           <li class="nav-item ">
+                                 <a class="nav-link word-break" href="{% url 'profile' %}">Profile - {{user.username}}</a>
+                          </li>
+                    {% endif %}
+                          <li class="nav-item">
+                                 <a class="nav-link" href="{%url 'event-home' %}">Home</a>
+                          </li>
+                          <li class="nav-item">
+                                 <a class="nav-link" href="{% url 'event-about' %}">About</a>
+                          </li>
+                  {% if user.is_authenticated %}
+                          <li class="nav-item">
+                                 <a class="nav-link" href="{% url 'post-create' %}">Create-Post</a>
+                          </li>
+                          <li class="nav-item">
+                                 <a class="nav-link" href="{% url 'user-posts' user.username %}">Your-Post</a>
+                          </li>
+                          <li class="nav-item">
+                                 <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                          </li>                         
+                    {% else %}
+                           <li class="nav-item">
+                                 <a class="nav-link" href="{% url 'login' %}">Login</a>
+                          </li>
+                          <li class="nav-item">
+                                 <a class="nav-link" href="{% url 'register' %}">Register</a>
+                          </li>
+                    {% endif %}
+
+                    </ul>
+              </div>
+        </div>
+  </nav>
+
+  <!-- Page Content -->
+     <section class="blog section-padding pb-3">
+           {% if messages %}
+                  <div class="container">               
+                           {% for message in messages %}
+                                    <div class="alert alert-{{message.tags}} shadow-sm my-3 text-center" role='alert' data-dismiss='alert'>
+                                          {{message}}
+                                    </div>
+                            {% endfor %}
+                  </div>
+            {% endif%}
+
+          {% block content %}
+          {% endblock content %} 
+     </section>
+
+    <script type="text/javascript" src="{% static 'event/js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'event/js/bootstrap.bundle.min.js' %}"></script>
+
+    {% block js %}  {% endblock js %}
+ </body>
+</html>
